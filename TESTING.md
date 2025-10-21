@@ -104,13 +104,27 @@ Esto crea:
 
 Agrega scripts de prueba a tu `package.json`:
 
-json { "scripts": { "dev": "next dev --turbopack", "build": "next build", "start": "next start", "lint": "next lint", "test:e2e": "playwright test", "test:e2e:ui": "playwright test --ui", "test:e2e:debug": "playwright test --debug", "test:e2e:headed": "playwright test --headed", "test:e2e:report": "playwright show-report" } }
-
+```json 
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report" 
+  }
+}
+```
 
 #### Paso 5: Configurar Playwright para Next.js
 
 Edita `playwright.config.ts` para integrarlo con tu aplicación Next.js:
 
+```typescript
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -142,7 +156,7 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
   },
 });
-
+```
 
 #### Paso 6: Verificar Instalación
 
@@ -197,17 +211,62 @@ Cuando se te pregunte:
 #### Paso 4: Actualizar Scripts en package.json
 
 Agrega estos scripts a `package.json`:
-json { "scripts": { "dev": "next dev --turbopack", "build": "next build", "start": "next start", "lint": "next lint", "test:e2e": "playwright test", "test:e2e:ui": "playwright test --ui", "test:e2e:debug": "playwright test --debug", "test:e2e:headed": "playwright test --headed", "test:e2e:report": "playwright show-report" } }
-
+```json
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
+  }
+}
+```
 
 #### Paso 5: Configurar Playwright para Next.js
 
 Crea o edita `playwright.config.ts`:
-typescript import { defineConfig, devices } from '@playwright/test';
-export default defineConfig({ testDir: './e2e', fullyParallel: true, forbidOnly: !!process.env.CI, retries: process.env.CI ? 2 : 0, workers: process.env.CI ? 1 : undefined, reporter: 'html',
-use: { baseURL: '[http://localhost:3000](http://localhost:3000)', trace: 'on-first-retry', screenshot: 'only-on-failure', },
-projects: [ { name: 'chromium', use: { ...devices['Desktop Chrome'] }, }, { name: 'firefox', use: { ...devices['Desktop Firefox'] }, }, { name: 'webkit', use: { ...devices['Desktop Safari'] }, }, ],
-webServer: { command: 'npm run dev', url: '[http://localhost:3000](http://localhost:3000)', reuseExistingServer: !process.env.CI, }, });
+```typescript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  use: {
+    baseURL: '[http://localhost:3000](http://localhost:3000)',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    ],
+  webServer: {
+    command: 'npm run dev',
+    url: '[http://localhost:3000](http://localhost:3000)',
+    reuseExistingServer: !process.env.CI,
+  },
+});
+```
+
 
 #### Paso 6: Verificar Instalación
 
@@ -292,7 +351,8 @@ typescript await page.waitForResponse(response => response.url().includes('/api/
 
 
 ### Ejemplo: Prueba de Flujo Completo de Alquiler
-typescript import { test, expect } from '@playwright/test';
+```typescript
+import { test, expect } from '@playwright/test';
 test.describe('Flujo de Alquiler', () => { test('el usuario puede completar una reserva de alquiler', async ({ page }) => { // Navegar a inicio await page.goto('/');
 // Hacer clic en el primer artículo destacado
 await page.getByRole('link', { name: /Ver detalles/i }).first().click();
@@ -320,6 +380,7 @@ await page.getByRole('button', { name: /Reservar ahora/i }).click();
 await expect(page).toHaveURL(/success=1/);
 await expect(page.getByText(/éxito/i)).toBeVisible();
 }); });
+```
 
 ---
 
