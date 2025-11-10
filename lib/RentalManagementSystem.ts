@@ -1,7 +1,7 @@
 export type Category = "dress" | "shoes" | "bag" | "jacket";
 
 export type Item = {
-  id: number;
+  id: number | undefined;
   name: string;
   category: Category;
   pricePerDay: number;
@@ -75,7 +75,7 @@ const items: Item[] = [
   },
 ];
 
-let rentals: Rental[] = [];
+const rentals: Rental[] = [];
 
 export function listItems(filters?: {
   q?: string;
@@ -102,6 +102,18 @@ export function getItem(id: number) {
   return items.find((i) => i.id === id) ?? null;
 }
 
+export function createItem(newItem: Item) {
+  let lastId = 0;
+  items.forEach((item) => {
+    if (lastId < item.id) lastId = item.id 
+  });
+
+  newItem.id = lastId+1; // Use next valid id
+  items.push(newItem);
+
+  return newItem;
+}
+
 export function getItemRentals(itemId: number) {
   return rentals.filter((r) => r.itemId === itemId && r.status === "active");
 }
@@ -114,6 +126,7 @@ export function isItemAvailable(itemId: number, start: string, end: string) {
   const rs = getItemRentals(itemId);
   return rs.every((r) => !hasOverlap(start, end, r.start, r.end));
 }
+
 
 export function createRental(data: Omit<Rental, "id" | "createdAt" | "status">) {
   const ok = isItemAvailable(data.itemId, data.start, data.end);

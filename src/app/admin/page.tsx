@@ -1,21 +1,32 @@
-import { isAdmin, getOrCreateCsrfToken } from "@/lib/CsrfSessionManagement";
-import { listItems, listRentals } from "@/lib/RentalManagementSystem";
+"use client"
+// import { isAdmin, getOrCreateCsrfToken } from "@/lib/CsrfSessionManagement";
+import { Item, listItems, createItem, listRentals } from "@/lib/RentalManagementSystem";
 import { redirect } from "next/navigation";
+import Modal from "../common/modal";
+import { useState } from "react";
+import ItemForm from "./items/ItemForm";
 
 type AdminItem = {
-  id: number | string;
+  id: number | undefined;
   name: string;
   category: string;
   sizes: string[];
   pricePerDay: number;
 };
 
-export default async function Page() {
-  if (!isAdmin()) redirect("/admin/login");
-  const csrf = await getOrCreateCsrfToken();
+export default function Page() {
+  // if (!isAdmin()) redirect("/admin/login");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // const csrf = await getOrCreateCsrfToken();
 
   const items = listItems();
   const rentals = listRentals();
+
+  const handleAddItemSubmit = (formData: Item) => {
+    createItem(formData);
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
@@ -41,7 +52,7 @@ export default async function Page() {
               </tr>
             </thead>
             <tbody>
-            {items.map((i: AdminItem) => (
+              {items.map((i: AdminItem) => (
                 <tr key={i.id} className="border-t">
                   <td className="py-2 pr-4">{i.id}</td>
                   <td className="py-2 pr-4">{i.name}</td>
@@ -50,6 +61,13 @@ export default async function Page() {
                   <td className="py-2 pr-4">${i.pricePerDay}</td>
                 </tr>
               ))}
+              <tr key={"AA"} className="border-t">
+                <td className="py-2 pr-4">
+                  <button className="text-sm rounded-lg border px-3 py-2" onClick={() => { setIsModalOpen(true) }}>
+                    +
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -109,6 +127,13 @@ export default async function Page() {
           </table>
         </div>
       </section>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2 className="text-xl mb-4">Enter Your Details</h2>
+        <ItemForm onSubmit={handleAddItemSubmit} />
+      </Modal>
+
+      {/* This div is for the ReactDOM.createPortal target */}
+      <div id="modal-root"></div>
     </div>
   );
 }
