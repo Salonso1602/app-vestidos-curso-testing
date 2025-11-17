@@ -22,10 +22,10 @@ const getEmptyItem = (): Item => {
 };
 
 const categoryLabels: Record<Category, string> = {
-    dress: "Vestido",
-    shoes: "Zapatos",
-    bag: "Cartera",
-    jacket: "Campera",
+    dress: "Dress",
+    shoes: "Shoes",
+    bag: "Bag",
+    jacket: "jacket",
 };
 
 const ItemForm: React.FC<ItemFormProps> = ({ item = undefined, onSubmit }) => {
@@ -54,13 +54,14 @@ const ItemForm: React.FC<ItemFormProps> = ({ item = undefined, onSubmit }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            {getTextField("name", formData.name, "Nombre:")}
+            {getTextField("name", formData.name, "Name:")}
+            {getTextField("alt", formData.alt, "Alternative Name:")}
             {getCategoriesDropdown()}
             {getTextField("color", formData.color, "Color:")}
-            {getTextField("style", formData.style, "Estilo:")}
+            {getTextField("style", formData.style, "Style:")}
             {getTextListField(sizeInputs)}
-            {getTextField("description", formData.description, "Descripción:")}
-            {getTextField("pricePerDay", formData.pricePerDay, "Precio por Dia:", "number")}
+            {getTextField("description", formData.description, "Description:")}
+            {getTextField("pricePerDay", formData.pricePerDay, "Price Per Day:", "number")}
             {getImagesField(imageInputs)}
             <button
                 type="submit"
@@ -137,7 +138,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item = undefined, onSubmit }) => {
                             key={index}
                             type="text"
                             value={value}
-                            placeholder="Ingresar talle..."
+                            placeholder="Enter size..."
                             onChange={(e) => handleSizeChange(index, e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-white-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
@@ -172,7 +173,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item = undefined, onSubmit }) => {
     function getImagesField(images: string[]) {
         return (
             <div className="mb-4">
-                <label className="block text-white-700 text-sm font-bold mb-2">Imágenes:</label>
+                <label className="block text-white-700 text-sm font-bold mb-2">Images:</label>
 
                 <div className="flex flex-col gap-2">
                     {images.map((img, index) => (
