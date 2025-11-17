@@ -61,15 +61,11 @@ export default function Page() {
                   <td className="py-2 pr-4">${i.pricePerDay}</td>
                 </tr>
               ))}
-              <tr key={"AA"} className="border-t">
-                <td className="py-2 pr-4">
-                  <button className="text-sm rounded-lg border px-3 py-2" onClick={() => { setIsModalOpen(true) }}>
-                    +
-                  </button>
-                </td>
-              </tr>
             </tbody>
           </table>
+          <button className="text-xl bg-fuchsia-600 rounded-lg border px-3 py-2" onClick={() => { setIsModalOpen(true) }}>
+            +
+          </button>
         </div>
       </section>
 
@@ -128,7 +124,7 @@ export default function Page() {
         </div>
       </section>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2 className="text-xl mb-4">Enter Your Details</h2>
+        <h2 className="text-xl mb-4">Agregar artículo</h2>
         <ItemForm onSubmit={handleAddItemSubmit} />
       </Modal>
 
