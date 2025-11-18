@@ -34,6 +34,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Item not available for selected dates" }, { status: 409 });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { rental, error } = createRental({
     itemId,
     start,
