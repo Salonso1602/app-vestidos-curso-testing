@@ -68,7 +68,39 @@ Check your versions:
 - Hot reloading: Edits to files under `app/` will auto-refresh the browser during development.
 - Ports: If port 3000 is in use, set `PORT=3001` (macOS/Linux) or `set PORT=3001` (Windows CMD) or `$env:PORT=3001` (PowerShell) before `npm run dev`.
 
+## Jenkins (Linux only) 
 
+First build the Jenkins Docker Image
+```bash
+docker build -t jenkins-docker ./Jenkins/
+```
+
+Then run the container
+```bash
+docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins-docker
+```
+
+Remember to get the Jenkins password from the container's logs
+```bash
+docker logs jenkins
+```
+
+Once in, navigate to Settings > Plugins and install the following plugins:
+- Docker plugin
+- Docker pipeline
+- Docker API plugin
+- Docker Commons plugin
+- HTML Publisher plugin
+
+After all plugins where installed, create a "New Item" configuring:
+- Item type: Pipeline
+- Pipeline > Definition: Pipeline script from SCM
+  - SCM: Git
+    - Repository URL: https://github.com/Salonso1602/app-vestidos-curso-testing.git 
+    - Branches to build: [YOUR BRANCH]
+  - Script Path: Jenkins/JenkinsFile
+
+Once saved you may access the Pipeline and build and run the pipeline.
 
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

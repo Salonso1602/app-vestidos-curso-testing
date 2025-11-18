@@ -1,0 +1,71 @@
+pipeline {
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
+            args '-u root:root' // necesario para permisos de escritura en reportes
+        }
+    }
+
+    environment {
+        CI = 'true'
+        PORT = '3000'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Build App') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Start Server') {
+            steps {
+                // Iniciar la app en segundo plano
+                sh 'nohup npm run start &'
+                // Esperar unos segundos a que levante
+                sh 'sleep 10'
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                // Ejecutar los tests headless
+                sh 'npx playwright test --reporter=html'
+            }
+            post {
+                always {
+                    // Archivar reportes
+                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+                    // Publicar el reporte HTML de Playwright (si usas el plugin HTML Publisher)
+                    publishHTML(target: [
+                        reportName: 'Playwright Report',
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        keepAll: true,
+                        alwaysLinkToLastBuild: true,
+                        allowMissing: true
+                    ])
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up any running processes...'
+            sh 'pkill -f "next start" || true'
+        }
+    }
+}
