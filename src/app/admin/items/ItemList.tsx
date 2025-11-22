@@ -49,11 +49,11 @@ const ItemList: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
-                <button className="text-xl bg-fuchsia-600 rounded-lg border px-3 py-2" onClick={() => { setIsModalOpen(true) }}>
+                <button id="open-new-item-modal-btn" className="text-xl bg-fuchsia-600 rounded-lg border px-3 py-2" onClick={() => { setIsModalOpen(true) }}>
                     +
                 </button>
             </div>
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+            <Modal id="new-item-modal" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <h2 className="text-xl mb-4">Add Item</h2>
                 <ItemForm onSubmit={handleAddItemSubmit} />
             </Modal>

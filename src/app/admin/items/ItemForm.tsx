@@ -1,7 +1,7 @@
 import { Category, Item } from '@/lib/RentalManagementSystem';
 import React, { useState, FormEvent } from 'react';
 
-interface ItemFormProps {
+interface ItemFormProps extends Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit"> {
     item?: Item,
     onSubmit: (data: Item) => void;
 }
@@ -64,10 +64,11 @@ const ItemForm: React.FC<ItemFormProps> = ({ item = undefined, onSubmit }) => {
             {getTextField("pricePerDay", formData.pricePerDay, "Price Per Day:", "number")}
             {getImagesField(imageInputs)}
             <button
+                id='submitItemModalBtn'
                 type="submit"
                 className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-                Agregar
+                Add
             </button>
         </form>
     );
@@ -130,7 +131,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item = undefined, onSubmit }) => {
     function getTextListField(values: string[]) {
         return (
             <div className="mb-4">
-                <label className="block text-white-700 text-sm font-bold mb-2">Talles:</label>
+                <label className="block text-white-700 text-sm font-bold mb-2">Sizes:</label>
 
                 <div className="flex flex-col gap-2">
                     {values.map((value, index) => (
