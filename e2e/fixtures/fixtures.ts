@@ -9,24 +9,28 @@ export type FixtureOptions = {
 }
 
 export type Fixtures = {
+  homePage: Page
   loggedInPage: Page
   itemPage: ItemPage
 }
 
 export const test = base.extend<FixtureOptions & Fixtures>({
-  loggedInPage: async ({ page }, provide) => {
-    await page.goto(appUrls.home);
-    await page.getByRole('link', { name: 'Admin' }).click();
+  homePage: async ({ page }, provide) => {
+    await page.goto(appUrls.home)
+    await provide(page)
+  },
+  loggedInPage: async ({ homePage }, provide) => {
+    await homePage.getByRole('link', { name: 'Admin' }).click();
 
-    await baseExpect(page.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
-    await page.getByRole('textbox', { name: 'Username' }).fill(testUsers.admin.username);
-    await page.getByRole('textbox', { name: 'Password' }).fill(testUsers.admin.password);
-    await page.getByRole('button', { name: 'Sign in' }).click();
+    await baseExpect(homePage.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
+    await homePage.getByRole('textbox', { name: 'Username' }).fill(testUsers.admin.username);
+    await homePage.getByRole('textbox', { name: 'Password' }).fill(testUsers.admin.password);
+    await homePage.getByRole('button', { name: 'Sign in' }).click();
 
-    await page.waitForURL('**/admin*', { waitUntil: 'networkidle' });
-    await baseExpect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
+    await homePage.waitForURL('**/admin*', { waitUntil: 'networkidle' });
+    await baseExpect(homePage.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
 
-    await provide(page);
+    await provide(homePage);
   },
   itemId: ['1', { option: true }],
   itemPage: async ({ page, itemId }, provide) => {
