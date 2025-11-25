@@ -1,5 +1,5 @@
 import { Item } from '@/lib/RentalManagementSystem';
-import { test } from './fixtures/auth';
+import { test } from './fixtures/fixtures';
 import { AdminDashboardPage, ItemFormModalPage } from './pages/AdminDashboardPage';
 import { testItems } from './testData/items';
 
