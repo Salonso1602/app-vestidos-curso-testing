@@ -1,20 +1,13 @@
 import { isAdmin, getOrCreateCsrfToken } from "@/lib/CsrfSessionManagement";
-import { listItems, listRentals } from "@/lib/RentalManagementSystem";
+import { listRentals } from "@/lib/RentalManagementSystem";
 import { redirect } from "next/navigation";
+import ItemList from "./items/ItemList";
 
-type AdminItem = {
-  id: number | string;
-  name: string;
-  category: string;
-  sizes: string[];
-  pricePerDay: number;
-};
 
 export default async function Page() {
   if (!isAdmin()) redirect("/admin/login");
-  const csrf = await getOrCreateCsrfToken();
 
-  const items = listItems();
+  const csrf = await getOrCreateCsrfToken();
   const rentals = listRentals();
 
   return (
@@ -27,32 +20,7 @@ export default async function Page() {
       </div>
 
       <section className="mt-8">
-        <h2 className="font-semibold">Inventory</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400">Add/edit/delete can be wired to a database later.</p>
-        <div className="mt-3 overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead id='table-header'>
-              <tr className="text-left">
-                <th className="py-2 pr-4">ID</th>
-                <th className="py-2 pr-4">Name</th>
-                <th className="py-2 pr-4">Category</th>
-                <th className="py-2 pr-4">Sizes</th>
-                <th className="py-2 pr-4">Price/day</th>
-              </tr>
-            </thead>
-            <tbody>
-            {items.map((i: AdminItem) => (
-                <tr key={i.id} className="border-t">
-                  <td className="py-2 pr-4">{i.id}</td>
-                  <td className="py-2 pr-4">{i.name}</td>
-                  <td className="py-2 pr-4">{i.category}</td>
-                  <td className="py-2 pr-4">{i.sizes.join(", ")}</td>
-                  <td className="py-2 pr-4">${i.pricePerDay}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ItemList />
       </section>
 
       <section className="mt-10">

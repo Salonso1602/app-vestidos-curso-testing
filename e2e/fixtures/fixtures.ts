@@ -2,8 +2,18 @@ import { test as base, expect as baseExpect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { appUrls } from '../testData/urls';
 import { testUsers } from '../testData/credentials';
+import { ItemPage } from '../pages/ItemPage';
 
-export const test = base.extend<{ loggedInPage: Page }>({
+export type FixtureOptions = {
+  itemId: string
+}
+
+export type Fixtures = {
+  loggedInPage: Page
+  itemPage: ItemPage
+}
+
+export const test = base.extend<FixtureOptions & Fixtures>({
   loggedInPage: async ({ page }, provide) => {
     await page.goto(appUrls.home);
     await page.getByRole('link', { name: 'Admin' }).click();
@@ -18,6 +28,11 @@ export const test = base.extend<{ loggedInPage: Page }>({
 
     await provide(page);
   },
+  itemId: ['1', { option: true }],
+  itemPage: async ({ page, itemId }, provide) => {
+    await page.goto(`${appUrls.items}/${itemId}`);
+    await provide(new ItemPage(page));
+  }
 });
 
 export const expect = baseExpect;
