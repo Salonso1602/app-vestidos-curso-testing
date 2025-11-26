@@ -21,11 +21,11 @@ export class SearchPage {
     this.styleInput = page.locator('input[placeholder="Style (e.g., cocktail)"]');
     this.searchButton = page.getByRole('button', { name: 'Search' });
     this.itemCards = page.locator('div.rounded-2xl.border.bg-white');
-    this.browseLink = page.getByRole('link', { name: 'Browse' });
+    this.browseLink = page.getByRole('link', { name: 'Browse' }).first();
   }
 
   async goto(): Promise<void> {
-    await this.page.goto(appUrls.search);
+    await this.page.goto(`${appUrls.search}?isTest=true`);
   }
 
   async navigateToBrowseFromHome(): Promise<void> {

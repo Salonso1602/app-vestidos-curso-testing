@@ -1,11 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { SearchPage } from './pages/SearchPage';
 import { searchTestCases } from './testData/searches';
+import { env } from 'node:process';
 
 test.describe('RF-001: Search for Items', () => {
     let searchPage: SearchPage;
 
     test.describe.configure({ mode: 'parallel' });
+
+    env.IS_TEST = 'true';
+    process.env.IS_TEST = 'true';
 
     for (const testCase of searchTestCases) {
         test(`${testCase.id}: ${testCase.title}`, async ({ page }) => {

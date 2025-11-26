@@ -10,22 +10,25 @@ type SearchParams = {
   style?: string;
   start?: string;
   end?: string;
+  isTest?: string;
 };
 
 export default function Page({ searchParams }: { searchParams: SearchParams }) {
-  const { q = "", category = "", size = "", color = "", style = "" } = searchParams;
+  const { q = "", category = "", size = "", color = "", style = "", isTest } = searchParams;
   const items = listItems({
     q,
+    isTest,
     category: category || undefined,
     size: size || undefined,
     color: color || undefined,
-    style: style || undefined,
+    style: style || undefined
   });
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="text-2xl sm:text-3xl font-bold">Browse catalog</h1>
       <form method="GET" className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+        <input name="isTest" type="hidden" value={isTest} />
         <input name="q" defaultValue={q} placeholder="Search…" className="rounded-xl border px-3 py-2 text-sm" />
         <select name="category" defaultValue={category} className="rounded-xl border px-3 py-2 text-sm">
           <option value="">All categories</option>
