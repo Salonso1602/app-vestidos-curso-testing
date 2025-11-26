@@ -1,3 +1,5 @@
+import { generateSearchTestItems } from "@/e2e/testData/searchTestItems";
+
 export type Category = "dress" | "shoes" | "bag" | "jacket";
 
 export type Item = {
@@ -24,7 +26,7 @@ export type Rental = {
 };
 
 // In-memory store for demo. Replace with a DB in production.
-const items: Item[] = [
+let items: Item[] = [
   {
     id: 1,
     name: "Silk Evening Gown",
@@ -75,6 +77,10 @@ const items: Item[] = [
   },
 ];
 
+if (process.env.NODE_ENV === 'test') {
+  items = generateSearchTestItems();
+}
+
 const rentals: Rental[] = [];
 
 export function listItems(filters?: {
@@ -105,7 +111,7 @@ export function getItem(id: number) {
 export function createItem(newItem: Item) {
   let lastId = 0;
   items.forEach((item) => {
-    if (lastId < item.id) lastId = item.id 
+    if (lastId < item.id!) lastId = item.id!
   });
 
   newItem.id = lastId+1; // Use next valid id
