@@ -25,9 +25,10 @@ export type Rental = {
   status: "active" | "canceled";
 };
 
+const isTest = process.env.IS_TEST || process.env.NEXT_PUBLIC_IS_TEST;
+
 // In-memory store for demo. Replace with a DB in production.
-const testItems = generateSearchTestItems();
-let items: Item[] = [
+let items: Item[] = isTest ? generateSearchTestItems() : [
     {
       id: 1,
       name: "Silk Evening Gown",
@@ -86,12 +87,10 @@ export function listItems(filters?: {
   size?: string;
   color?: string;
   style?: string;
-  isTest?: string; // Se usa esta variable para cambiar los vestidos enviados para los de casos de prueba. En un entorno real, esto no sería necesario.
 }) {
   const q = filters?.q?.toLowerCase().trim();
-  const filterItemList = filters?.isTest ? testItems : items;
 
-  return filterItemList.filter((it) => {
+  return items.filter((it) => {
     if (filters?.category && it.category !== filters.category) return false;
     if (filters?.size && !it.sizes.includes(filters.size)) return false;
     if (filters?.color && it.color.toLowerCase() !== filters.color.toLowerCase()) return false;

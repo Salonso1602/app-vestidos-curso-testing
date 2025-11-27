@@ -25,7 +25,7 @@ export class SearchPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto(`${appUrls.search}?isTest=true`);
+    await this.page.goto(`${appUrls.search}`);
   }
 
   async navigateToBrowseFromHome(): Promise<void> {
