@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { appUrls } from '../testData/urls';
 import { testUsers } from '../testData/credentials';
 import { ItemPage } from '../pages/ItemPage';
+import { SearchPage } from '../pages/SearchPage';
 
 export type FixtureOptions = {
   itemId: string
@@ -11,6 +12,7 @@ export type FixtureOptions = {
 export type Fixtures = {
   loggedInPage: Page
   itemPage: ItemPage
+  searchPage: SearchPage
 }
 
 export const test = base.extend<FixtureOptions & Fixtures>({
@@ -32,6 +34,9 @@ export const test = base.extend<FixtureOptions & Fixtures>({
   itemPage: async ({ page, itemId }, provide) => {
     await page.goto(`${appUrls.items}/${itemId}`);
     await provide(new ItemPage(page));
+  },
+  searchPage: async ({ page }, provide) => {
+    await provide(new SearchPage(page));
   }
 });
 
