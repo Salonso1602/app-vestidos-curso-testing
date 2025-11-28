@@ -4,6 +4,7 @@ import { appUrls } from '../testData/urls';
 import { testUsers } from '../testData/credentials';
 import { ItemPage } from '../pages/ItemPage';
 import { HomePage } from '../pages/HomePage';
+import { BecomeALenderPage } from '../pages/BecomeALenderPage';
 
 export type FixtureOptions = {
   itemId: string
@@ -13,12 +14,17 @@ export type Fixtures = {
   homePage: HomePage
   loggedInPage: Page
   itemPage: ItemPage
+  becomeALenderPage: BecomeALenderPage
 }
 
 export const test = base.extend<FixtureOptions & Fixtures>({
   homePage: async ({ page }, provide) => {
     await page.goto(appUrls.home)
     await provide(new HomePage(page))
+  },
+  becomeALenderPage: async ({ page }, provide) => {
+    await page.goto(appUrls.becomeALender)
+    await provide(new BecomeALenderPage(page))
   },
   loggedInPage: async ({ page }, provide) => {
     await page.goto(appUrls.home) // start from home page
