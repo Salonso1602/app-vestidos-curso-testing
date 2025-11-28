@@ -5,6 +5,7 @@ import { testUsers } from '../testData/credentials';
 import { ItemPage } from '../pages/ItemPage';
 import { HomePage } from '../pages/HomePage';
 import { BecomeALenderPage } from '../pages/BecomeALenderPage';
+import { SearchPage } from '../pages/SearchPage';
 
 export type FixtureOptions = {
   itemId: string
@@ -15,6 +16,7 @@ export type Fixtures = {
   loggedInPage: Page
   itemPage: ItemPage
   becomeALenderPage: BecomeALenderPage
+  searchPage: SearchPage
 }
 
 export const test = base.extend<FixtureOptions & Fixtures>({
@@ -44,6 +46,9 @@ export const test = base.extend<FixtureOptions & Fixtures>({
   itemPage: async ({ page, itemId }, provide) => {
     await page.goto(`${appUrls.items}/${itemId}`);
     await provide(new ItemPage(page));
+  },
+  searchPage: async ({ page }, provide) => {
+    await provide(new SearchPage(page));
   }
 });
 

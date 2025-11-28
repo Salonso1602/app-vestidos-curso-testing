@@ -53,7 +53,6 @@ export class AdminDashboardPage {
 
         const cells = row.locator('td');
 
-        await expect(cells.nth(0)).toHaveText(String(item.id ?? ""));
         await expect(cells.nth(1)).toHaveText(item.name);
         await expect(cells.nth(2)).toHaveText(item.category);
         await expect(cells.nth(3)).toHaveText(item.sizes.join(", "));

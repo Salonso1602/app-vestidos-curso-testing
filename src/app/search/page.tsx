@@ -19,7 +19,7 @@ export default function Page({ searchParams }: { searchParams: SearchParams }) {
     category: category || undefined,
     size: size || undefined,
     color: color || undefined,
-    style: style || undefined,
+    style: style || undefined
   });
 
   return (

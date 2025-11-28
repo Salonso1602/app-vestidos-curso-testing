@@ -73,6 +73,9 @@ Check your versions:
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Run Tests
+ - Set the `IS_TEST` and `NEXT_PUBLIC_IS_TEST` in the `.env` file to true to use the mock test dataset.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
