@@ -3,13 +3,14 @@ import type { Page } from '@playwright/test';
 import { appUrls } from '../testData/urls';
 import { testUsers } from '../testData/credentials';
 import { ItemPage } from '../pages/ItemPage';
+import { HomePage } from '../pages/HomePage';
 
 export type FixtureOptions = {
   itemId: string
 }
 
 export type Fixtures = {
-  homePage: Page
+  homePage: HomePage
   loggedInPage: Page
   itemPage: ItemPage
 }
@@ -17,20 +18,21 @@ export type Fixtures = {
 export const test = base.extend<FixtureOptions & Fixtures>({
   homePage: async ({ page }, provide) => {
     await page.goto(appUrls.home)
-    await provide(page)
+    await provide(new HomePage(page))
   },
-  loggedInPage: async ({ homePage }, provide) => {
-    await homePage.getByRole('link', { name: 'Admin' }).click();
+  loggedInPage: async ({ page }, provide) => {
+    await page.goto(appUrls.home) // start from home page
+    await page.getByRole('link', { name: 'Admin' }).click();
 
-    await baseExpect(homePage.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
-    await homePage.getByRole('textbox', { name: 'Username' }).fill(testUsers.admin.username);
-    await homePage.getByRole('textbox', { name: 'Password' }).fill(testUsers.admin.password);
-    await homePage.getByRole('button', { name: 'Sign in' }).click();
+    await baseExpect(page.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
+    await page.getByRole('textbox', { name: 'Username' }).fill(testUsers.admin.username);
+    await page.getByRole('textbox', { name: 'Password' }).fill(testUsers.admin.password);
+    await page.getByRole('button', { name: 'Sign in' }).click();
 
-    await homePage.waitForURL('**/admin*', { waitUntil: 'networkidle' });
-    await baseExpect(homePage.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
+    await page.waitForURL('**/admin*', { waitUntil: 'networkidle' });
+    await baseExpect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
 
-    await provide(homePage);
+    await provide(page);
   },
   itemId: ['1', { option: true }],
   itemPage: async ({ page, itemId }, provide) => {
