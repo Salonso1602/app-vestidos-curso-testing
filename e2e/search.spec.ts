@@ -17,10 +17,6 @@ test.describe('RF-001: Search for Items', () => {
             if (testCase.shouldReturnResults) {
                 const itemCount = await searchPage.getItemCount();
                 expect(itemCount).toBeGreaterThan(0);
-
-                console.log(
-                    `✓ ${testCase.id}: Found ${itemCount} items matching criteria: ${JSON.stringify(testCase.filters)}`
-                );
             } else {
                 const itemCount = await searchPage.getItemCount();
                 expect(itemCount).toBe(0);
